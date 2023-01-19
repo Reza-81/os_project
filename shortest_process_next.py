@@ -1,8 +1,8 @@
 from process import Process
 from typing import List
-import csv
+from show_analysis import show_analysis
 #----------------------------------------------------------------------------------------------------------------------------
-def spn(process_list : list[Process]):
+def spn(process_list : list[Process]) -> tuple[list[Process], int, int]:
     creation_queue:List[Process] = process_list[::]
     ready_queue:List[Process] = list()
     waiting_queue:List[Process] = list()
@@ -44,21 +44,10 @@ def spn(process_list : list[Process]):
         else:
             idle_time += 1
             time_line += 1
+    finished_processes.sort(key=lambda process: process.id)
     return (finished_processes, time_line, idle_time)
 #----------------------------------------------------------------------------------------------------------------------------
-def get_process_list(file_name: str):
-    process_list:List[Process] = list()
-    with open(file_name) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        line_count = 0
-        for row in csv_reader:
-            if line_count == 0:
-                line_count += 1
-            else:
-                process_list.append(Process(int(row[0]), int(row[1]), int(row[2]), int(row[3]), int(row[4])))
-    return process_list
-#----------------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    process_list = get_process_list('test.csv')
+    process_list = Process.get_process_list('test.csv')
     result = spn(process_list)
-    process_list = result[0]
+    show_analysis('spn', result[0], result[1], result[2])

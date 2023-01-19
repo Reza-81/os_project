@@ -1,12 +1,14 @@
 from process import Process
 from typing import List
-import csv
+from show_analysis import show_analysis
 #----------------------------------------------------------------------------------------------------------------------------
-def srtf(process_list : list[Process]):
+def srtf(process_list: list[Process]):
+    process_list.sort(key=lambda process: process.id)
     creation_queue:List[Process] = process_list[::]
     ready_queue:List[Process] = list()
     waiting_queue:List[Process] = list()
-    finished_processes:List[process] = list()
+    finished_processes:List[Process] = list()
+    process_duration = [process.process_duration.copy() for process in  process_list]
     time_line = 0
     idle_time = 0
 
@@ -27,7 +29,7 @@ def srtf(process_list : list[Process]):
         # select form ready_queue
         if ready_queue:
             current_process = ready_queue[0]
-            for process in ready_queue:
+            for process in ready_queue[::]:
                 if current_process.process_duration[current_process._stage] > process.process_duration[process._stage]:
                     current_process = process
             if current_process.start == None:
@@ -42,24 +44,25 @@ def srtf(process_list : list[Process]):
                 elif current_process._stage == 3:
                     current_process.end = time_line + 1
                     finished_processes.append(current_process)
+            elif current_process.process_duration[current_process._stage] <= 0:
+                ready_queue.remove(current_process)
+                current_process.update_stage(True)
+                if current_process._stage == 1:
+                    current_process.start_io = time_line
+                    waiting_queue.append(current_process)
+                elif current_process._stage == 3:
+                    current_process.end = time_line
+                    finished_processes.append(current_process)
+                continue
         else:
             idle_time += 1
         time_line += 1
+    finished_processes.sort(key=lambda process: process.id)
+    for i in range(len(process_duration)):
+        finished_processes[i].process_duration = process_duration[i]
     return (finished_processes, time_line, idle_time)
 #----------------------------------------------------------------------------------------------------------------------------
-def get_process_list(file_name: str):
-    process_list:List[Process] = list()
-    with open(file_name) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        line_count = 0
-        for row in csv_reader:
-            if line_count == 0:
-                line_count += 1
-            else:
-                process_list.append(Process(int(row[0]), int(row[1]), int(row[2]), int(row[3]), int(row[4])))
-    return process_list
-#----------------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    process_list = get_process_list('test.csv')
+    process_list = Process.get_process_list('test.csv')
     result = srtf(process_list)
-    process_list = result[0]
+    show_analysis('srtf', result[0], result[1], result[2])
