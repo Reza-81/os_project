@@ -12,8 +12,8 @@ def show_analysis(algorithm_name: str, process_list: list[Process], total_time: 
     a_w_t = 0
     for process in process_list:
         a_t_t += process.end - process.arrival_time
-        a_r_t = process.start_io
-        a_w_t = process.end - process.arrival_time - sum(process.process_duration.values())
+        a_r_t += process.start_io
+        a_w_t += process.end - process.arrival_time - sum(process.process_duration.values())
         id = str(process.id)
         start_end = str(process.start) + ' - ' + str(process.end)
         turn_around_time = str(process.end - process.arrival_time)
