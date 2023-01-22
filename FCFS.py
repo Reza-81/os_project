@@ -44,7 +44,6 @@ def fcfs(process_list: list[Process]) -> tuple[list[Process], int, int]:
             idle_time += 1
             time_line += 1
     finished_processes.sort(key=lambda process: process.id)
-    print(finished_processes, time_line, idle_time)
     return (finished_processes, time_line, idle_time)
 
 
@@ -52,4 +51,4 @@ def fcfs(process_list: list[Process]) -> tuple[list[Process], int, int]:
 if __name__ == '__main__':
     process_list = Process.get_process_list('test.csv')
     result = fcfs(process_list)
-    show_analysis('spn', result[0], result[1], result[2])
+    show_analysis('FCFS', result[0], result[1], result[2])

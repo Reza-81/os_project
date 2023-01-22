@@ -60,6 +60,6 @@ def roundRobin(process_list: list[Process], q):
 #----------------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     process_list = Process.get_process_list('test.csv')
-    q = int(input())
+    q = int(input('Enter the quantum: '))
     result = roundRobin(process_list, q)
-    show_analysis('srtf', result[0], result[1], result[2])
+    show_analysis('R.R', result[0], result[1], result[2])

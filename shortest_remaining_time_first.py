@@ -65,4 +65,4 @@ def srtf(process_list: list[Process]):
 if __name__ == '__main__':
     process_list = Process.get_process_list('test.csv')
     result = srtf(process_list)
-    show_analysis('srtf', result[0], result[1], result[2])
+    show_analysis('SRTF', result[0], result[1], result[2])

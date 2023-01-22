@@ -50,4 +50,4 @@ def spn(process_list : list[Process]) -> tuple[list[Process], int, int]:
 if __name__ == '__main__':
     process_list = Process.get_process_list('test.csv')
     result = spn(process_list)
-    show_analysis('spn', result[0], result[1], result[2])
+    show_analysis('SPN', result[0], result[1], result[2])

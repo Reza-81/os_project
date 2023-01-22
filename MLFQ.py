@@ -15,8 +15,8 @@ def mlfq(process_list: list[Process]):
     idle_time = 0
     ctr1 = 0
     ctr2 = 0
-    flag_ctr2 =0
-    flag_ctr3 =0
+    flag_ctr2 = 0
+    flag_ctr3 = 0
     while(ready_queue1 or ready_queue2 or ready_queue3 or waiting_queue or creation_queue):
         # creation
         for process in creation_queue[::]:
@@ -32,8 +32,7 @@ def mlfq(process_list: list[Process]):
                 process.update_stage(True)
 
         # select form ready_queue1
-
-        if ready_queue1 and flag_ctr2 ==0 and flag_ctr3 ==0:
+        if ready_queue1 and flag_ctr2 == 0 and flag_ctr3 == 0:
             current_process = ready_queue1[0]
             current_process.process_duration[current_process._stage] -= 1
             ctr1 += 1
@@ -54,7 +53,7 @@ def mlfq(process_list: list[Process]):
                     current_process.end = time_line + 1
                     finished_processes.append(current_process)
 
-        elif ready_queue2 and flag_ctr3 ==0:
+        elif ready_queue2 and flag_ctr3 == 0:
             current_process = ready_queue2[0]
             current_process.process_duration[current_process._stage] -= 1
             ctr2 += 1
@@ -100,7 +99,6 @@ def mlfq(process_list: list[Process]):
 
         time_line += 1
     finished_processes.sort(key=lambda process: process.id)
-    print(finished_processes)
     for i in range(len(process_duration)):
         finished_processes[i].process_duration = process_duration[i]
     return (finished_processes, time_line, idle_time)
@@ -108,4 +106,4 @@ def mlfq(process_list: list[Process]):
 if __name__ == '__main__':
     process_list = Process.get_process_list('test.csv')
     result = mlfq(process_list)
-    show_analysis('srtf', result[0], result[1], result[2])
+    show_analysis('MLFQ', result[0], result[1], result[2])
